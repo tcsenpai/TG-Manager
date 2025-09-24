@@ -39,42 +39,42 @@ echo -e "   Users Dir: $(pwd)/users"
 # Function to build and run
 run_bot() {
     echo -e "\n${BLUE}🔨 Building Docker image...${NC}"
-    docker-compose build
+    docker compose build
 
     echo -e "\n${BLUE}🚀 Starting bot with user permissions...${NC}"
-    UID=$USER_ID GID=$GROUP_ID docker-compose up -d
+    UID=$USER_ID GID=$GROUP_ID docker compose up -d
 
     echo -e "\n${GREEN}✅ Bot started successfully!${NC}"
-    echo -e "${GREEN}📝 To view logs: ${NC}docker-compose logs -f"
-    echo -e "${GREEN}⏹️  To stop bot: ${NC}docker-compose down"
+    echo -e "${GREEN}📝 To view logs: ${NC}docker compose logs -f"
+    echo -e "${GREEN}⏹️  To stop bot: ${NC}docker compose down"
 }
 
 # Function to show logs
 show_logs() {
     echo -e "\n${BLUE}📋 Bot logs:${NC}"
-    docker-compose logs -f
+    docker compose logs -f
 }
 
 # Function to stop bot
 stop_bot() {
     echo -e "\n${YELLOW}⏹️  Stopping bot...${NC}"
-    docker-compose down
+    docker compose down
     echo -e "${GREEN}✅ Bot stopped${NC}"
 }
 
 # Function to restart bot
 restart_bot() {
     echo -e "\n${YELLOW}🔄 Restarting bot...${NC}"
-    docker-compose down
-    UID=$USER_ID GID=$GROUP_ID docker-compose up -d
+    docker compose down
+    UID=$USER_ID GID=$GROUP_ID docker compose up -d
     echo -e "${GREEN}✅ Bot restarted${NC}"
 }
 
 # Function to show status
 show_status() {
     echo -e "\n${BLUE}📊 Bot status:${NC}"
-    docker-compose ps
-    if docker-compose ps | grep -q "Up"; then
+    docker compose ps
+    if docker compose ps | grep -q "Up"; then
         echo -e "${GREEN}✅ Bot is running${NC}"
     else
         echo -e "${RED}❌ Bot is not running${NC}"
@@ -84,7 +84,7 @@ show_status() {
 # Function to clean up
 cleanup() {
     echo -e "\n${YELLOW}🧹 Cleaning up Docker resources...${NC}"
-    docker-compose down -v
+    docker compose down -v
     docker system prune -f
     echo -e "${GREEN}✅ Cleanup complete${NC}"
 }
