@@ -41,8 +41,8 @@ run_bot() {
     echo -e "\n${BLUE}🔨 Building Docker image...${NC}"
     docker compose build
 
-    echo -e "\n${BLUE}🚀 Starting bot with user permissions...${NC}"
-    UID=$HOST_UID GID=$HOST_GID docker compose up -d
+    echo -e "\n${BLUE}🚀 Starting bot...${NC}"
+    docker compose up -d
 
     echo -e "\n${GREEN}✅ Bot started successfully!${NC}"
     echo -e "${GREEN}📝 To view logs: ${NC}docker compose logs -f"
@@ -66,7 +66,7 @@ stop_bot() {
 restart_bot() {
     echo -e "\n${YELLOW}🔄 Restarting bot...${NC}"
     docker compose down
-    UID=$HOST_UID GID=$HOST_GID docker compose up -d
+    docker compose up -d
     echo -e "${GREEN}✅ Bot restarted${NC}"
 }
 

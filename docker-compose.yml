@@ -6,8 +6,8 @@ services:
     container_name: tgtask-bot
     restart: unless-stopped
 
-    # Run with your user ID to avoid permission issues
-    user: "${UID:-1000}:${GID:-1000}"
+    # Optional: Run with specific user (remove if not needed)
+    # user: "1000:1000"
 
     # Mount the exact same directory
     volumes:
