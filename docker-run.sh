@@ -13,8 +13,8 @@ BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
 # Get current user ID and group ID
-USER_ID=$(id -u)
-GROUP_ID=$(id -g)
+HOST_UID=$(id -u)
+HOST_GID=$(id -g)
 
 echo -e "${BLUE}🐳 Telegram Task Bot - Docker Runner${NC}"
 echo -e "${BLUE}================================================${NC}"
@@ -31,8 +31,8 @@ fi
 mkdir -p users
 
 echo -e "${GREEN}📋 Configuration:${NC}"
-echo -e "   User ID: $USER_ID"
-echo -e "   Group ID: $GROUP_ID"
+echo -e "   User ID: $HOST_UID"
+echo -e "   Group ID: $HOST_GID"
 echo -e "   Project Dir: $(pwd)"
 echo -e "   Users Dir: $(pwd)/users"
 
@@ -42,7 +42,7 @@ run_bot() {
     docker compose build
 
     echo -e "\n${BLUE}🚀 Starting bot with user permissions...${NC}"
-    UID=$USER_ID GID=$GROUP_ID docker compose up -d
+    UID=$HOST_UID GID=$HOST_GID docker compose up -d
 
     echo -e "\n${GREEN}✅ Bot started successfully!${NC}"
     echo -e "${GREEN}📝 To view logs: ${NC}docker compose logs -f"
@@ -66,7 +66,7 @@ stop_bot() {
 restart_bot() {
     echo -e "\n${YELLOW}🔄 Restarting bot...${NC}"
     docker compose down
-    UID=$USER_ID GID=$GROUP_ID docker compose up -d
+    UID=$HOST_UID GID=$HOST_GID docker compose up -d
     echo -e "${GREEN}✅ Bot restarted${NC}"
 }
 
