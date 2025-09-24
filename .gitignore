@@ -1,0 +1,59 @@
+# Dependencies
+node_modules/
+.pnp.*
+
+# Build outputs
+dist/
+build/
+
+# Environment files
+.env.local
+.env.production
+
+# Logs
+*.log
+logs/
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage directory used by tools like istanbul
+coverage/
+*.lcov
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+Thumbs.db
+
+# User data (preserve for sync)
+users/*/
+!users/.gitkeep
+
+# Temporary files
+*.tmp
+*.temp
+temp/
+
+# Backup files
+*.backup
+*.bak
+
+# CLI-Manager builds (reference only)
+CLI-Manager/build/
+CLI-Manager/dist/
+.serena
+CLI-Manager
+.env
+CLAUDE.md
+tasks

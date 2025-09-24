@@ -1,0 +1,40 @@
+{
+  "name": "telegram-task-bot",
+  "version": "0.1.0",
+  "description": "Telegram bot that replicates CLI-task-manager functionality with perfect sync compatibility",
+  "keywords": ["telegram", "bot", "tasks", "sync", "cli-compatible"],
+  "author": "tcsenpai",
+  "license": "ISC",
+  "main": "src/index.ts",
+  "type": "module",
+  "scripts": {
+    "start": "bun run src/index.ts",
+    "dev": "bun --watch run src/index.ts",
+    "build": "bun build src/index.ts --outdir=dist --minify --target=node",
+    "lint:print": "eslint src",
+    "lint:fix": "eslint src --fix",
+    "type-check": "tsc --noEmit",
+    "test": "bun test",
+    "test:watch": "bun test --watch",
+    "test:cli": "echo 'CLI compatibility test - to be implemented'",
+    "clean": "rm -rf dist node_modules"
+  },
+  "dependencies": {
+    "dotenv": "^16.3.1",
+    "moment": "^2.30.1",
+    "telegraf": "^4.15.6"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.5",
+    "@typescript-eslint/eslint-plugin": "^6.15.0",
+    "@typescript-eslint/parser": "^6.15.0",
+    "eslint": "^8.56.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.1.2",
+    "prettier": "^3.1.1",
+    "typescript": "^5.3.3"
+  },
+  "engines": {
+    "bun": ">=1.0.0"
+  }
+}

@@ -1,0 +1,118 @@
+
+ 
+ Creating storage file
+ 
+ task storage [<relative path>]
+ 
+ <relative path> : If you want to change the path, default tasks.json
+ 
+ -----
+ Creating the config file
+ 
+ task config
+ 
+ 
+ It will create a task.config.json
+ You don't need to have a configuration file, it's used to pass default global arguments to the CLI, see section below.
+ 
+ -----
+ Viewing
+ 
+ task [<task(s)>] [global args]
+ 
+ <task(s)> : The id of the task you want to display, you can pass multiple by separating the ids by ',' without space
+ 
+ -----
+ Creating a task
+ 
+ task a [<task>] [<task name>] [-d <description>] [-s <state>] [global args]
+ 
+ <task> : Task id uppon which you want to add a child subtask
+ <name> : Task name
+ -d <description> : Task description
+ -s <state> : Task state defined by the config file
+ 
+ If no args are provided after 'a' you will enter interactive mode to create your task
+ 
+ -----
+ Editing
+ 
+ task e <task(s)> [<new name>] [-d <description>] [-s <state>] [global args]
+ 
+ <task(s)> : The id of the task you want to edit, you can pass multiple by separating the ids by ',' without space
+ <new name> : Edit task name
+ -d <description> : Edit task description
+ -s <state> : Edit task state defined by the config file
+ 
+ If no args are provided after 'e' you will enter interactive mode to edit your task
+ 
+ -----
+ Incrementing task
+ 
+ task i <task(s)> [-r] [global args]
+ 
+ <task(s)> : The id of the task you want to increment, you can pass multiple by separating the ids by ',' without space
+ -r: Also update target task's subtasks, 'recursive'
+ 
+ Will put tasks to the next state (next index in config file)
+ 
+ -----
+ Checking task
+ 
+ task c <task(s)> [-r] [global args]
+ 
+ <task(s)> : The id of the task you want to change, you can pass multiple by separating the ids by ',' without space
+ -r: Also update target task's subtasks, 'recursive'
+ 
+ Will put tasks to the final state (last index in config file)
+ 
+ -----
+ Moving task
+ 
+ task mv <target task(s)> [<task id dest>] [global args]
+ 
+ <target task(s)> : The id of the task you want to move, you can pass multiple by separating the ids by ',' without space
+ <task id dest> : The id of the target task
+ 
+ -----
+ Deleting
+ 
+ task d <task(s)>
+ 
+ <task(s)> : The id of the task you want to remove, you can pass multiple by separating the ids by ',' without space
+ 
+ -----
+ Extracting
+ 
+ task x <task(s)> <relative path>
+ 
+ <task(s)> : The id of the task you want to extract, you can pass multiple by separating the ids by ',' without space
+ <relative path> : Path of the new storage file
+ 
+ -----
+ 
+ Global arguments:
+ 
+ They can either be passed by CLI arguments, or set through the config file
+ 
+ --storage <relative path> : The specific storage file to use if path different than default tasks.json
+ --depth <n> : Print every tasks and also n levels of subtasks
+ --group <(state,priority,id)> : Group by attribute
+ --sort <(asc,desc)> : Sort order
+ --hide-description : Hide tasks descriptions ; 'hideDescription' in the config file
+ --show-description : Bypass the 'hideDescription' argument in config file
+ --hide-tree : Hide tree branches ; 'hideTree' in the config file
+ --hide-timestamp : No timestamp ; 'hideTimestamp' in the config file
+ --hide-completed : Don't display completed tasks ; 'hideCompleted' in the config file
+ --show-completed : Bypass the 'shouldNotPrintAfter' argument in config file
+ --hide-sub-counter : No subtask counter in parent task
+ --no-print : Prevent printing your tasks after having ran your command ; 'shouldNotPrintAfter' in the config file
+ --print : Bypass the 'shouldNotPrintAfter' argument in config file
+ --clear : Clear the terminal before printing ; 'clearBefore' in the config file
+ --no-clear : Bypass the 'clearBefore' argument in the config file
+ 
+ -----
+ cli-task-manager: Providing an easy and usefull command line interface for managing tasks with local files
+ Version: 1.0.4
+ More informations and examples at https://github.com/MikyStar/CLI-Manager
+
