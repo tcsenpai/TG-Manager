@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  telegram-task-bot:
+    build: .
+    container_name: tgtask-bot
+    restart: unless-stopped
+
+    # Run with your user ID to avoid permission issues
+    user: "${UID:-1000}:${GID:-1000}"
+
+    # Mount the exact same directory
+    volumes:
+      - ./users:/app/users
+      - ./.env:/app/.env:ro
+
+    # Environment variables
+    environment:
+      - NODE_ENV=production
+      - TZ=UTC
+
+    # Load environment from .env file
+    env_file:
+      - .env
+
+    # Health check
+    healthcheck:
+      test: ["CMD", "pgrep", "-f", "bun"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+    # Resource limits
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+          cpus: '0.5'
+        reservations:
+          memory: 128M
+          cpus: '0.25'
