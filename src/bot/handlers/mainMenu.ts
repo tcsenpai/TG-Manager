@@ -19,6 +19,10 @@ export function getMainMenuKeyboard() {
       ],
       [
         { text: '📊 Statistics', callback_data: 'tasks_stats' },
+        { text: '⚙️ Settings', callback_data: 'config_menu' }
+      ],
+      [
+        { text: '💾 Download JSON', callback_data: 'download_json' },
         { text: '❓ Help', callback_data: 'help_main' }
       ]
     ]

@@ -18,6 +18,13 @@ import {
   handleTextMessage
 } from './bot/handlers/taskActions';
 import { handleSearchTasks, handleSearchQuery, getUserSearchState, clearUserSearchState } from './bot/handlers/taskSearch';
+import {
+  handleConfigMenu,
+  handleToggleHideCompleted,
+  handleResetConfig,
+  handleResetConfigConfirm
+} from './bot/handlers/configMenu';
+import { handleDownloadJson } from './bot/handlers/downloadHandler';
 import { UserStorage } from './core/UserStorage';
 import { TaskManager } from './core/TaskManager';
 
@@ -91,6 +98,15 @@ bot.action('tasks_list', handleTasksList);
 bot.action('tasks_tree', handleTasksTree);
 bot.action('tasks_stats', handleTasksStats);
 bot.action('tasks_search', handleSearchTasks);
+
+// Configuration menu handlers
+bot.action('config_menu', handleConfigMenu);
+bot.action('config_toggle_hide_completed', handleToggleHideCompleted);
+bot.action('config_reset', handleResetConfig);
+bot.action('config_reset_confirm', handleResetConfigConfirm);
+
+// Download handler
+bot.action('download_json', handleDownloadJson);
 
 // Task detail handlers
 bot.action(/^task_detail_(\d+)$/, async ctx => {

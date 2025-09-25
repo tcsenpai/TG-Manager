@@ -3,7 +3,24 @@ import type { BotContext } from '../../types/bot';
 import type { ITask } from '../../types/cli';
 import { UserStorage } from '../../core/UserStorage';
 import { TaskManager } from '../../core/TaskManager';
+import { UserConfig } from '../../core/UserConfig';
 import { getStateIcon, getStateDisplayName } from '../../utils/stateManager';
+import { sanitizeText, formatAsCode } from '../../utils/telegramUtils';
+
+/**
+ * Filter completed tasks from the task list recursively
+ */
+function filterCompletedTasks(tasks: ITask[]): ITask[] {
+  return tasks
+    .filter(task => task.state !== 'done')
+    .map(task => {
+      const filteredTask: ITask = { ...task };
+      if (task.subtasks && task.subtasks.length > 0) {
+        filteredTask.subtasks = filterCompletedTasks(task.subtasks);
+      }
+      return filteredTask;
+    });
+}
 
 /**
  * Display tasks list with navigation
@@ -20,7 +37,15 @@ export async function handleTasksList(ctx: BotContext): Promise<void> {
   try {
     const userStorage = new UserStorage(userId);
     const taskManager = new TaskManager(userStorage);
-    const tasks = await taskManager.getAllTasks();
+    const userConfig = new UserConfig(userId);
+    await userConfig.initialize();
+
+    let tasks = await taskManager.getAllTasks();
+
+    // Filter completed tasks if user has hide completed enabled
+    if (userConfig.hideCompleted) {
+      tasks = filterCompletedTasks(tasks);
+    }
 
     if (tasks.length === 0) {
       await ctx.editMessageText(
@@ -123,13 +148,27 @@ export async function handleTasksTree(ctx: BotContext): Promise<void> {
   try {
     const userStorage = new UserStorage(userId);
     const taskManager = new TaskManager(userStorage);
-    const tasks = await taskManager.getAllTasks();
+    const userConfig = new UserConfig(userId);
+    await userConfig.initialize();
+
+    let tasks = await taskManager.getAllTasks();
+
+    // Filter completed tasks if user has hide completed enabled
+    if (userConfig.hideCompleted) {
+      tasks = filterCompletedTasks(tasks);
+    }
 
     if (tasks.length === 0) {
+      const messageText = userConfig.hideCompleted
+        ? `🌳 **Tree View**\n\n` +
+          `No active tasks found.\n` +
+          `All tasks are completed or you haven't created any yet.`
+        : `🌳 **Tree View**\n\n` +
+          `No tasks found.\n` +
+          `Create your first task to get started!`;
+
       await ctx.editMessageText(
-        `🌳 **Tree View**\n\n` +
-        `No tasks found.\n` +
-        `Create your first task to get started!`,
+        messageText,
         {
           reply_markup: {
             inline_keyboard: [
@@ -148,7 +187,11 @@ export async function handleTasksTree(ctx: BotContext): Promise<void> {
     const statsText = formatTreeStats(stats);
 
     await ctx.editMessageText(
-      `🌳 **Tree View** (${tasks.length} tasks)\n\n${treeText}\n\n${statsText}`,
+      `🌳 Tree View (${tasks.length} tasks)
+
+${treeText}
+
+${statsText}`,
       {
         reply_markup: {
           inline_keyboard: [
@@ -156,8 +199,7 @@ export async function handleTasksTree(ctx: BotContext): Promise<void> {
             [{ text: '🔍 Search', callback_data: 'tasks_search' }],
             [{ text: '🔙 Main Menu', callback_data: 'main_menu' }]
           ]
-        },
-        parse_mode: 'Markdown'
+        }
       }
     );
   } catch (error) {
@@ -468,11 +510,12 @@ function createSubtasksKeyboard(subtasks: ITask[], parentId: number) {
  * Format tasks in tree structure (like CLI output)
  */
 function formatTasksTree(tasks: ITask[]): string {
-  return tasks
+  const treeText = tasks
     .map((task, index) => {
       const icon = getStateIcon(task.state || 'todo');
-      const name = task.name || 'Untitled';
-      const description = task.description ? `\n   ${task.description}` : '';
+      const name = sanitizeText(task.name || 'Untitled');
+      const description = task.description ? `
+   ${sanitizeText(task.description)}` : '';
 
       let taskLine = `${task.id}.	${icon} ${name}${description}`;
 
@@ -480,7 +523,7 @@ function formatTasksTree(tasks: ITask[]): string {
       if (task.subtasks && task.subtasks.length > 0) {
         const subtaskLines = task.subtasks.map((subtask, subIndex) => {
           const subIcon = getStateIcon(subtask.state || 'todo');
-          const subName = subtask.name || 'Untitled';
+          const subName = sanitizeText(subtask.name || 'Untitled');
           const isLast = subIndex === task.subtasks!.length - 1;
           const prefix = isLast ? '└──' : '├──';
 
@@ -493,6 +536,9 @@ function formatTasksTree(tasks: ITask[]): string {
       return taskLine;
     })
     .join('\n\n');
+  
+  // Return as code block to avoid markdown parsing issues
+  return formatAsCode(treeText);
 }
 
 /**
